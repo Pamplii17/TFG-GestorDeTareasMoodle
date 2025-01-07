@@ -9,23 +9,19 @@ class MoodleApiService {
     final url = Uri.parse(
         '$MOODLE_URL/login/token.php?username=$username&password=$password&service=$MOODLE_SERVICE_NAME');
 
-    try {
-      final response = await http.get(url);
+    final response = await http.get(url);
 
-      if (response.statusCode == 200) {
-        final data = json.decode(response.body);
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
 
-        if (data['token'] != null) {
-          _token = data['token'];
-          return true;
-        } else {
-          return false;
-        }
+      if (data['token'] != null) {
+        _token = data['token'];
+        return true;
       } else {
-        throw Exception('Error ${response.statusCode}: ${response.body}');
+        return false;
       }
-    } catch (e) {
-      throw Exception('Error de inicio de sesion');
+    } else {
+      throw Exception('Error de conexion con el servidor');
     }
   }
 }

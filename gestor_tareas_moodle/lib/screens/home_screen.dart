@@ -9,7 +9,12 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold (
-      body: SingleChildScrollView()
+      appBar: AppBar(
+        title: Text('Home Screen'),
+      ),
+      body: Center(
+        child: Text('Welcome to the Home Screen!'),
+      ),
     );
   }
 }

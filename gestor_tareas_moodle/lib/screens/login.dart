@@ -25,7 +25,7 @@ class _LoginScreenState extends State<LoginScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Image.asset(
-                  'assets/logoUBU.png', // Asegúrate de tener esta imagen en tus assets
+                  'assets/logoUBU.png',
                   height: 100,
                 ),
               ],

@@ -6,22 +6,31 @@ class MoodleApiService {
   static String? _token;
 
   static Future<bool> login(String username, String password) async {
-    final url = Uri.parse(
-        '$MOODLE_URL/login/token.php?username=$username&password=$password&service=$MOODLE_SERVICE_NAME');
+    // Reemplaza con la URL de tu servidor Moodle
+    final uri = Uri.parse('http://localhost/login/token.php');
 
-    final response = await http.get(url);
+    try {
+      final response = await http.post(
+        uri,
+        body: {
+          'username': username,
+          'password': password,
+          'service': MOODLE_SERVICE_NAME,
+        },
+      );
 
-    if (response.statusCode == 200) {
-      final data = json.decode(response.body);
-
-      if (data['token'] != null) {
-        _token = data['token'];
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
         return true;
       } else {
+        print('Error en la solicitud: ${response.statusCode}');
+        print('Detalles: ${response.body}');
         return false;
       }
-    } else {
-      throw Exception('Error de conexion con el servidor');
+    } catch (e) {
+      print('Error al conectar con Moodle: $e');
     }
-  }
+
+    return true;
+  }  
 }

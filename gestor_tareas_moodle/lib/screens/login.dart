@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gestor_tareas_moodle/screens/home_screen.dart';
 import 'package:gestor_tareas_moodle/services/moodle_api_service.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -18,7 +19,6 @@ class _LoginScreenState extends State<LoginScreen> {
       backgroundColor: Colors.grey[100],
       body: Column(
         children: [
-          // Logo y encabezado
           Expanded(
             flex: 3,
             child: Column(
@@ -31,7 +31,6 @@ class _LoginScreenState extends State<LoginScreen> {
               ],
             ),
           ),
-          // Formulario de inicio de sesión
           Expanded(
             flex: 4,
             child: Container(
@@ -54,8 +53,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                   SizedBox(height: 30),
-                  // Campo de correo universitario
                   TextField(
+                    controller: _usernameController,
                     decoration: InputDecoration(
                       hintText: 'Correo universitario',
                       filled: true,
@@ -69,8 +68,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                   SizedBox(height: 20),
-                  // Campo de contraseña
                   TextField(
+                    controller: _passwordController,
                     obscureText: true,
                     decoration: InputDecoration(
                       hintText: 'Contraseña',
@@ -85,9 +84,16 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                   SizedBox(height: 30),
-                  // Botón de acceder
                   ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () async {
+                      bool success = await MoodleApiService.login(
+                          _usernameController.text, _passwordController.text);
+                      print(success);
+                      if (success) {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => HomeScreen()));
+                      }
+                    },
                     style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30),
@@ -109,7 +115,6 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
           ),
-          // Pie de página
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 10),
             child: Text(

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:gestor_tareas_moodle/models/user_model.dart';
 import 'package:gestor_tareas_moodle/screens/home_screen.dart';
 import 'package:gestor_tareas_moodle/services/moodle_api_service.dart';
+import 'package:gestor_tareas_moodle/models/assign.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -13,10 +15,24 @@ class _LoginScreenState extends State<LoginScreen> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
 
+  Future<Map<String, dynamic>> loginData() async {
+    UserModel userData =
+        UserModel.fromJson(await MoodleApiService.getUserInfo());
+    Map<String, dynamic>? userCourses =
+        await MoodleApiService.getUserCourses(userData.id);
+    Map<String, Assign>? assignments;
+
+    return {
+      'user': userData,
+      'userCourses': userCourses,
+      'assingments': assignments
+    };
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[100],
+      backgroundColor: const Color(0xFFF4F4F4),
       body: Column(
         children: [
           Expanded(
@@ -35,7 +51,7 @@ class _LoginScreenState extends State<LoginScreen> {
             flex: 4,
             child: Container(
               width: double.infinity,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.vertical(
                   top: Radius.circular(40),
@@ -44,7 +60,7 @@ class _LoginScreenState extends State<LoginScreen> {
               padding: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
               child: Column(
                 children: [
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   Text(
                     'Iniciar Sesión',
                     style: TextStyle(
@@ -52,7 +68,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       fontWeight: FontWeight.w600,
                     ),
                   ),
-                  SizedBox(height: 30),
+                  const SizedBox(height: 30),
                   TextField(
                     controller: _usernameController,
                     decoration: InputDecoration(
@@ -67,7 +83,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   TextField(
                     controller: _passwordController,
                     obscureText: true,
@@ -83,13 +99,16 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 30),
+                  const SizedBox(height: 30),
                   ElevatedButton(
                     onPressed: () async {
                       bool success = await MoodleApiService.login(
                           _usernameController.text, _passwordController.text);
-                      print(success);
                       if (success) {
+                        print('Success');
+                        var userInfo = await MoodleApiService.getUserInfo();
+                        print('User info');
+                        UserModel user = UserModel.fromJson(userInfo);
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => HomeScreen()));
                       }
@@ -99,10 +118,10 @@ class _LoginScreenState extends State<LoginScreen> {
                         borderRadius: BorderRadius.circular(30),
                       ),
                       backgroundColor: Colors.grey[300],
-                      padding: EdgeInsets.symmetric(vertical: 15),
+                      padding: const EdgeInsets.symmetric(vertical: 15),
                       minimumSize: Size(double.infinity, 50),
                     ),
-                    child: Text(
+                    child: const Text(
                       'Acceder',
                       style: TextStyle(
                         fontSize: 16,

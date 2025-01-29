@@ -9,7 +9,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Gestor Tareas UBU',
       theme: ThemeData(
-
+        primaryColor: const Color(0xFFF4F4F4)
       ),
       initialRoute: '/',
       routes: {

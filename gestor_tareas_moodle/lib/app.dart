@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:gestor_tareas_moodle/screens/login.dart';
-import 'package:gestor_tareas_moodle/screens/home_screen.dart';
 
 class MyApp extends StatelessWidget {
   @override
@@ -11,10 +10,9 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primaryColor: const Color(0xFFF4F4F4)
       ),
-      initialRoute: '/',
+      initialRoute: '/login',
       routes: {
-        '/': (context) => LoginScreen(),
-        '/home': (context) => HomeScreen(),
+        '/login': (context) => const LoginScreen()
       },
     );
   }

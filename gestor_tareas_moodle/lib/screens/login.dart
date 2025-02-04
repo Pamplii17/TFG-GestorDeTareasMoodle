@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:gestor_tareas_moodle/models/user_model.dart';
 import 'package:gestor_tareas_moodle/screens/home_screen.dart';
 import 'package:gestor_tareas_moodle/services/moodle_api_service.dart';
-import 'package:gestor_tareas_moodle/models/assign.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -15,19 +14,19 @@ class _LoginScreenState extends State<LoginScreen> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
 
-  Future<Map<String, dynamic>> loginData() async {
-    UserModel userData =
-        UserModel.fromJson(await MoodleApiService.getUserInfo());
-    Map<String, dynamic>? userCourses =
-        await MoodleApiService.getUserCourses(userData.id);
-    Map<String, Assign>? assignments;
+  // Future<Map<String, dynamic>> loginData() async {
+  //   UserModel userData =
+  //       UserModel.fromJson(await MoodleApiService.getUserInfo());
+  //   Map<String, dynamic>? userCourses =
+  //       await MoodleApiService.getUserCourses(userData.id);
+  //   Map<String, Assign>? assignments;
 
-    return {
-      'user': userData,
-      'userCourses': userCourses,
-      'assingments': assignments
-    };
-  }
+  //   return {
+  //     'user': userData,
+  //     'userCourses': userCourses,
+  //     'assingments': assignments
+  //   };
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -57,11 +56,11 @@ class _LoginScreenState extends State<LoginScreen> {
                   top: Radius.circular(40),
                 ),
               ),
-              padding: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
               child: Column(
                 children: [
                   const SizedBox(height: 20),
-                  Text(
+                  const Text(
                     'Iniciar Sesión',
                     style: TextStyle(
                       fontSize: 20,
@@ -75,8 +74,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       hintText: 'Correo universitario',
                       filled: true,
                       fillColor: Colors.grey[200],
-                      contentPadding:
-                          EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+                      contentPadding: const EdgeInsets.symmetric(
+                          vertical: 15, horizontal: 20),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(30),
                         borderSide: BorderSide.none,
@@ -91,8 +90,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       hintText: 'Contraseña',
                       filled: true,
                       fillColor: Colors.grey[200],
-                      contentPadding:
-                          EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+                      contentPadding: const EdgeInsets.symmetric(
+                          vertical: 15, horizontal: 20),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(30),
                         borderSide: BorderSide.none,
@@ -105,12 +104,27 @@ class _LoginScreenState extends State<LoginScreen> {
                       bool success = await MoodleApiService.login(
                           _usernameController.text, _passwordController.text);
                       if (success) {
-                        print('Success');
                         var userInfo = await MoodleApiService.getUserInfo();
-                        print('User info');
-                        UserModel user = UserModel.fromJson(userInfo);
+                        final UserModel user = UserModel.fromJson(userInfo);
+
+                        var userCourses = await MoodleApiService.getUserCourses(
+                            userInfo['id']);
+                        user.userCourses = userCourses;
+                        for (var course in user.userCourses!) {
+                          var assignments =
+                              await MoodleApiService.getCourseAssignments(
+                                  course.id);
+                          course.assignments = assignments;
+                        }
+
+                        for (var course in user.userCourses!) {
+                          var quizzes = await MoodleApiService.getCourseQuizzes(
+                              course.id);
+                          course.quizzes = quizzes;
+                        }
+                        
                         Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => HomeScreen()));
+                            builder: (context) => HomeScreen(user: user)));
                       }
                     },
                     style: ElevatedButton.styleFrom(
@@ -119,7 +133,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       backgroundColor: Colors.grey[300],
                       padding: const EdgeInsets.symmetric(vertical: 15),
-                      minimumSize: Size(double.infinity, 50),
+                      minimumSize: const Size(double.infinity, 50),
                     ),
                     child: const Text(
                       'Acceder',

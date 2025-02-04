@@ -45,3 +45,9 @@ const String WS_GET_USER_SUBMISS_STATUS = 'mod_assign_get_submission_status';
   Description: Get user courses by userId
 */
 const String WS_GET_USER_COURSES = 'core_enrol_get_users_courses';
+
+/*
+  Name: WS_GET_COURSE_QUIZ
+  Description: Get user quizzes by courseId
+*/
+const String WS_GET_COURSE_QUIZ = 'mod_quiz_get_quizzes_by_courses';

@@ -3,6 +3,9 @@ import 'package:gestor_tareas_moodle/screens/gantt_chart_screen.dart';
 import 'package:gestor_tareas_moodle/models/user_model.dart';
 
 class HomeScreen extends StatefulWidget {
+  final UserModel user;
+
+  HomeScreen({super.key, required this.user});
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -27,7 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ElevatedButton(
                 onPressed: () {
                   Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => GanttChartScreen()));
+                      builder: (context) => GanttChartScreen(user: widget.user)));
                 },
                 child: const Text("Tareas Gantt"))
           ],

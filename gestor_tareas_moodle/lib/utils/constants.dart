@@ -2,7 +2,7 @@
   Name: MOODLE_URL
   Description: URL of the Moodle server
 */
-const String MOODLE_URL = 'http://localhost';
+const String MOODLE_URL = 'http://10.160.33.99';
 
 /*
   Name: MOODLE_SERVICE_NAME

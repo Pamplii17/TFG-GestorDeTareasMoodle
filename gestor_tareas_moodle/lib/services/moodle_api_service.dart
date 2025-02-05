@@ -57,7 +57,8 @@ class MoodleApiService {
         throw Exception('Error statusCode');
       }
     } catch (e) {
-      throw Exception('Fatal error while getting user info');
+      print('${e.toString()}');
+      throw Exception();
     }
   }
 
